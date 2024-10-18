@@ -1,0 +1,48 @@
+import time
+
+def is_prime(num):
+    if num <= 1:
+        return False
+    for i in range(2, int(num**0.5) + 1):
+        if num % i == 0:
+            return False
+    return True
+
+def find_primes_up_to_n(n):
+    primes = []
+    for number in range(2, n + 1):
+        if is_prime(number):
+            primes.append(number)
+    return primes
+
+def sieve_of_eratosthenes(n):
+    is_prime = [True] * (n + 1)
+    p = 2
+    while (p * p <= n):
+        if is_prime[p]:
+            for i in range(p * p, n + 1, p):
+                is_prime[i] = False
+        p += 1
+    primes = [p for p in range(2, n + 1) if is_prime[p]]
+    return primes
+
+# Сравнение времени выполнения
+N_values = [10, 100, 1000, 5000, 10000, 20000]
+results = []
+
+for N in N_values:
+    # Время для проверки простоты
+    start_time = time.time()
+    find_primes_up_to_n(N)
+    time_check = time.time() - start_time
+
+    # Время для решета Эратосфена
+    start_time = time.time()
+    sieve_of_eratosthenes(N)
+    time_sieve = time.time() - start_time
+
+    results.append((N, time_check, time_sieve))
+
+# Вывод результатов
+for result in results:
+    print(f"N = {result[0]}, Время (проверка) = {result[1]:.6f} сек, Время (решето) = {result[2]:.6f} сек")
